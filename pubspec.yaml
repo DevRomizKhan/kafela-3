@@ -1,0 +1,50 @@
+name: kafela
+description: "A Flutter application for Kafela management system"
+publish_to: 'none'  # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  fl_chart: ^0.55.2
+  cupertino_icons: ^1.0.8
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.17.3
+  google_fonts: ^6.1.0
+  cloud_firestore: ^4.15.0
+  firebase_storage: ^11.2.0  # FirebaseStorage er jonne
+  image_picker: ^1.0.4
+  intl: ^0.18.1
+  provider: ^6.1.1
+  syncfusion_flutter_charts: ^23.1.44
+  flutter_launcher_icons: ^0.13.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  
+  # To add assets to your application, add an assets section, like this:
+  # assets:
+  #   - assets/images/
+  #   - assets/icons/
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font.
+  # For details on fonts from package dependencies,
+  # see https://flutter.dev/to/using-google-fonts
+  # fonts:
+  #   - family: YourFontFamily
+  #     fonts:
+  #       - asset: fonts/YourFont-Regular.ttf
+  #       - asset: fonts/YourFont-Bold.ttf
+  #         weight: 700

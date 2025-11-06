@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "886619458553",
+    "project_id": "kafela-ebc05",
+    "storage_bucket": "kafela-ebc05.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886619458553:android:2a28cc50ac6740af67cb28",
+        "android_client_info": {
+          "package_name": "com.example.kafela"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQu2TthMSEQYHFiO4RZ64NBFBS3pAvr2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
