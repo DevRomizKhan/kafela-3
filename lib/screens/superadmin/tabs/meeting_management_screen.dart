@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -502,11 +503,14 @@ class _AttendanceSheetScreenState extends State<AttendanceSheetScreen> {
   Map<String, Map<String, bool>> _attendanceData = {};
   bool _isLoading = false;
   bool _isSaving = false;
+  String _searchQuery = '';
+  List<Map<String, dynamic>> _filteredMembers = [];
 
   @override
   void initState() {
     super.initState();
     _initializeAttendanceData();
+    _filteredMembers = widget.members;
   }
 
   void _initializeAttendanceData() {
@@ -517,6 +521,22 @@ class _AttendanceSheetScreenState extends State<AttendanceSheetScreen> {
         'end': false,
       };
     }
+  }
+
+  void _filterMembers(String query) {
+    setState(() {
+      _searchQuery = query;
+      if (query.isEmpty) {
+        _filteredMembers = widget.members;
+      } else {
+        _filteredMembers = widget.members.where((member) {
+          final name = member['name']?.toLowerCase() ?? '';
+          final email = member['email']?.toLowerCase() ?? '';
+          return name.contains(query.toLowerCase()) ||
+              email.contains(query.toLowerCase());
+        }).toList();
+      }
+    });
   }
 
   String _calculateAttendancePercentage(String uid) {
@@ -638,6 +658,25 @@ class _AttendanceSheetScreenState extends State<AttendanceSheetScreen> {
     );
   }
 
+  void _selectAllStart() {
+    setState(() {
+      _attendanceData.updateAll(
+            (key, value) => {'start': true, 'end': value['end']!},
+      );
+    });
+    _showSuccess('All "Start" attendances marked!');
+  }
+
+  void _selectAllEnd() {
+    setState(() {
+      _attendanceData.updateAll(
+            (key, value) => {'start': value['start']!, 'end': true},
+      );
+    });
+    _showSuccess('All "End" attendances marked!');
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -713,42 +752,123 @@ class _AttendanceSheetScreenState extends State<AttendanceSheetScreen> {
                   ),
                 ),
 
-                // Attendance Stats
+                // Search Bar
+                Padding(
+                  padding: EdgeInsets.all(padding),
+                  child: Card(
+                    color: Colors.grey[900],
+                    child: Padding(
+                      padding: const EdgeInsets.all(0),
+                      child: TextField(
+                        onChanged: _filterMembers,
+                        decoration: InputDecoration(
+                          labelText: 'Search members...',
+                          labelStyle: const TextStyle(color: Colors.black),
+                          prefixIcon: const Icon(Icons.search, color: Colors.black),
+                           border: OutlineInputBorder(
+                             borderRadius: BorderRadius.circular(8),
+                           ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Attendance Stats + Select All Buttons
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: padding),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Member Attendance',
-                        style: TextStyle(
-                          fontSize: isSmallScreen ? 14 : 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: isSmallScreen ? 12 : 16,
-                            vertical: isSmallScreen ? 4 : 6
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.blue.withOpacity(0.3)),
-                        ),
-                        child: Text(
-                          '${_attendanceData.values.where((v) => v['start']! || v['end']!).length} / ${widget.members.length} Present',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontSize: isSmallScreen ? 11 : 12,
+                      // Header Row: Title + Counter
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Member Attendance',
+                            style: TextStyle(
+                              fontSize: isSmallScreen ? 14 : 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                            ),
                           ),
-                        ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isSmallScreen ? 12 : 16,
+                              vertical: isSmallScreen ? 4 : 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                            ),
+                            child: Text(
+                              '${_attendanceData.values.where((v) => v['start']! || v['end']!).length} / ${widget.members.length} Present',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: isSmallScreen ? 11 : 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+
+                      // Select All Buttons Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: _selectAllStart,
+                              icon: const Icon(Icons.check_circle, color: Colors.white, size: 18),
+                              label: const Text(
+                                'Select All Start',
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.teal,
+                                padding: EdgeInsets.symmetric(vertical: isSmallScreen ? 10 : 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                elevation: 3,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: _selectAllEnd,
+                              icon: const Icon(Icons.done_all, color: Colors.white, size: 18),
+                              label: const Text(
+                                'Select All End',
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.teal,
+                                padding: EdgeInsets.symmetric(vertical: isSmallScreen ? 10 : 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                elevation: 3,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
+                SizedBox(height: isSmallScreen ? 8 : 12),
+
                 SizedBox(height: isSmallScreen ? 8 : 12),
 
                 // Attendance List
@@ -758,8 +878,8 @@ class _AttendanceSheetScreenState extends State<AttendanceSheetScreen> {
                       minWidth: double.infinity,
                       minHeight: double.infinity,
                     ),
-                    child: widget.members.isEmpty
-                        ? const Center(
+                    child: _filteredMembers.isEmpty
+                        ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -770,7 +890,9 @@ class _AttendanceSheetScreenState extends State<AttendanceSheetScreen> {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'No members available',
+                            _searchQuery.isEmpty
+                                ? 'No members available'
+                                : 'No members found for "$_searchQuery"',
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey,
@@ -906,9 +1028,9 @@ class _AttendanceSheetScreenState extends State<AttendanceSheetScreen> {
 
   Widget _buildAttendanceList(bool isSmallScreen) {
     return ListView.builder(
-      itemCount: widget.members.length,
+      itemCount: _filteredMembers.length,
       itemBuilder: (context, index) {
-        final member = widget.members[index];
+        final member = _filteredMembers[index];
         final attendance = _attendanceData[member['uid']]!;
         final percentage = _calculateAttendancePercentage(member['uid']);
 

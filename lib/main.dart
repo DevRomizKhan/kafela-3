@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:kafela/screens/login_screen.dart';
 import 'package:kafela/services/database_service.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Kafela Management System',
+        title: 'Kafela Management',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,

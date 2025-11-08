@@ -144,67 +144,6 @@ class LogoutTab extends StatelessWidget {
               ),
               const SizedBox(height: 40),
 
-              // Quick Actions
-              Card(
-                color: Colors.grey[900],
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Quick Actions',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
-                        children: [
-                          _buildActionButton(
-                            Icons.settings,
-                            'Settings',
-                            Colors.blue,
-                                () {
-                              // Navigate to settings
-                            },
-                          ),
-                          _buildActionButton(
-                            Icons.help,
-                            'Help',
-                            Colors.orange,
-                                () {
-                              // Navigate to help
-                            },
-                          ),
-                          _buildActionButton(
-                            Icons.feedback,
-                            'Feedback',
-                            Colors.purple,
-                                () {
-                              // Navigate to feedback
-                            },
-                          ),
-                          _buildActionButton(
-                            Icons.privacy_tip,
-                            'Privacy',
-                            Colors.teal,
-                                () {
-                              // Navigate to privacy
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 40),
-
               // Logout Button
               SizedBox(
                 width: double.infinity,
@@ -221,7 +160,7 @@ class LogoutTab extends StatelessWidget {
                   ),
                   onPressed: () => _showLogoutConfirmation(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: Colors.green,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

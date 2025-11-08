@@ -237,7 +237,7 @@ class _DashboardTabState extends State<DashboardTab> {
           gradientColors: [Colors.greenAccent.shade400, Colors.green.shade700],
 
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
         _buildStatCard(
           'Attendance Rate',
           _overallAttendanceRate,
@@ -245,14 +245,14 @@ class _DashboardTabState extends State<DashboardTab> {
           isPercentage: true,
           gradientColors: [Colors.greenAccent.shade400, Colors.green.shade700],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
         _buildStatCard(
           'Total Tasks',
           _totalTasks,
           Icons.assignment,
           gradientColors: [Colors.greenAccent.shade400, Colors.green.shade700],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
         _buildStatCard(
           'Completed Tasks',
           _completedTasks,

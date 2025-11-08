@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:kafela/screens/member/tabs/prayer_attendance_tab.dart';
+import 'package:kafela/screens/member/tabs/tasks_tab.dart';
+
+import 'class_routine_tab.dart';
+import 'groups_tab.dart';
 
 class MemberDashboardTab extends StatefulWidget {
   const MemberDashboardTab({super.key});
@@ -102,7 +107,6 @@ class _MemberDashboardTabState extends State<MemberDashboardTab> {
     final now = DateTime.now();
     final formattedDate = DateFormat('EEEE, MMMM dd, yyyy').format(now);
     final formattedTime = DateFormat('hh:mm a').format(now);
-    final userName = _memberData?['name'] ?? 'Member';
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -123,43 +127,21 @@ class _MemberDashboardTabState extends State<MemberDashboardTab> {
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      Row(
+                       const Row(
                         children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.green.withOpacity(0.2),
-                            radius: 30,
-                            child: const Icon(
-                              Icons.person,
-                              color: Colors.green,
-                              size: 30,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Welcome back,',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey[400],
-                                  ),
-                                ),
-                                Text(
-                                  userName,
-                                  style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Member Dashboard',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey[400],
+                                SizedBox(height: 4),
+                                Center(
+                                  child: Text(
+                                    'Member Dashboard',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -183,9 +165,6 @@ class _MemberDashboardTabState extends State<MemberDashboardTab> {
 
               const SizedBox(height: 20),
 
-              // Today's Schedule
-              _buildTodaysSchedule(),
-
               const SizedBox(height: 20),
 
               // Quick Actions
@@ -201,8 +180,6 @@ class _MemberDashboardTabState extends State<MemberDashboardTab> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.green.withOpacity(0.3)),
       ),
       child: Row(
@@ -264,12 +241,14 @@ class _MemberDashboardTabState extends State<MemberDashboardTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Quick Stats',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        const Center(
+          child: Text(
+            'Quick Stats',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
         const SizedBox(height: 12),
@@ -354,38 +333,6 @@ class _MemberDashboardTabState extends State<MemberDashboardTab> {
     );
   }
 
-  Widget _buildTodaysSchedule() {
-    return Card(
-      color: Colors.grey[900],
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Row(
-              children: [
-                Icon(Icons.schedule, color: Colors.green),
-                SizedBox(width: 8),
-                Text(
-                  "Today's Schedule",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            _buildScheduleItem('Morning Prayer', '5:30 AM', 'Mosque'),
-            _buildScheduleItem('Class: Quran Study', '9:00 AM', 'Room 101'),
-            _buildScheduleItem('Dhuhr Prayer', '1:00 PM', 'Mosque'),
-            _buildScheduleItem('Group Meeting', '3:00 PM', 'Conference Room'),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildScheduleItem(String title, String time, String location) {
     return Container(
@@ -442,12 +389,14 @@ class _MemberDashboardTabState extends State<MemberDashboardTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Quick Actions',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            const Center(
+              child: Text(
+                'Quick Actions',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
             const SizedBox(height: 12),
@@ -459,7 +408,10 @@ class _MemberDashboardTabState extends State<MemberDashboardTab> {
                     Icons.mosque,
                     Colors.green,
                         () {
-                      // Navigate to prayer attendance
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => PrayerAttendanceTab()),
+                          );
                     },
                   ),
                 ),
@@ -468,9 +420,12 @@ class _MemberDashboardTabState extends State<MemberDashboardTab> {
                   child: _buildActionButton(
                     'View Tasks',
                     Icons.assignment,
-                    Colors.orange,
+                    Colors.green,
                         () {
-                      // Navigate to tasks
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const MemberTasksTab()),
+                          );
                     },
                   ),
                 ),
@@ -483,9 +438,12 @@ class _MemberDashboardTabState extends State<MemberDashboardTab> {
                   child: _buildActionButton(
                     'My Groups',
                     Icons.group,
-                    Colors.purple,
+                    Colors.green,
                         () {
-                      // Navigate to groups
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const MemberGroupsTab()),
+                          );
                     },
                   ),
                 ),
@@ -494,9 +452,12 @@ class _MemberDashboardTabState extends State<MemberDashboardTab> {
                   child: _buildActionButton(
                     'Routine',
                     Icons.schedule,
-                    Colors.blue,
+                    Colors.green,
                         () {
-                      // Navigate to routine
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ClassRoutineTab()),
+                          );
                     },
                   ),
                 ),

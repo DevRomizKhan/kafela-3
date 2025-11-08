@@ -211,7 +211,7 @@ class _PrayerAttendanceTabState extends State<PrayerAttendanceTab> {
                       _buildActionButton(
                         'Clear All',
                         Icons.clear_all,
-                        Colors.red,
+                        Colors.white,
                         _clearAllPrayers,
                       ),
                     ],
@@ -363,7 +363,7 @@ class _PrayerAttendanceTabState extends State<PrayerAttendanceTab> {
                   ? '${prayer.name} marked as prayed!'
                   : '${prayer.name} attendance removed',
             ),
-            backgroundColor: isMarked ? Colors.green : Colors.orange,
+            backgroundColor: isMarked ? Colors.green : Colors.red.withOpacity(0.2),
             duration: const Duration(seconds: 2),
           ),
         );
@@ -372,7 +372,7 @@ class _PrayerAttendanceTabState extends State<PrayerAttendanceTab> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error updating attendance: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.red.withOpacity(0.2),
         ),
       );
     }
@@ -418,7 +418,7 @@ class _PrayerAttendanceTabState extends State<PrayerAttendanceTab> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error marking all prayers: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.red.withOpacity(0.2),
         ),
       );
     }
@@ -447,7 +447,7 @@ class _PrayerAttendanceTabState extends State<PrayerAttendanceTab> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('All prayers cleared!'),
-            backgroundColor: Colors.orange,
+            backgroundColor: Colors.redAccent,
           ),
         );
       }
@@ -463,8 +463,8 @@ class _PrayerAttendanceTabState extends State<PrayerAttendanceTab> {
 
   Color _getProgressColor(int count) {
     if (count == 5) return Colors.green;
-    if (count >= 3) return Colors.orange;
-    return Colors.red;
+    if (count >= 3) return Colors.red.withOpacity(0.3);
+    return Colors.red.withOpacity(0.3);
   }
 
   String _getProgressMessage(int count) {

@@ -137,7 +137,6 @@ class _MemberActivityTabState extends State<MemberActivityTab> {
                               color: Colors.green,
                             ),
                           ),
-                          SizedBox(height: 4),
                           Text(
                             'Recent activities and progress',
                             style: TextStyle(
@@ -152,24 +151,6 @@ class _MemberActivityTabState extends State<MemberActivityTab> {
                 ),
               ),
             ),
-
-            // Activity Summary
-            Card(
-              color: Colors.grey[900],
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildActivityStat('Today', '5', Icons.today, Colors.green),
-                    _buildActivityStat('This Week', '28', Icons.calendar_view_week, Colors.orange),
-                    _buildActivityStat('Total', '156', Icons.all_inclusive, Colors.purple),
-                  ],
-                ),
-              ),
-            ),
-
             const SizedBox(height: 16),
 
             // Activities List

@@ -90,7 +90,9 @@ class _GroupsTabState extends State<GroupsTab> {
                   stream: _firestore.collection('groups').snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator(color: Colors.green));
+                      return const Center(
+                          child:
+                              CircularProgressIndicator(color: Colors.green));
                     }
 
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -107,10 +109,13 @@ class _GroupsTabState extends State<GroupsTab> {
                     return ListView.builder(
                       itemCount: groups.length,
                       itemBuilder: (context, index) {
-                        final group = groups[index].data() as Map<String, dynamic>;
+                        final group =
+                            groups[index].data() as Map<String, dynamic>;
                         final groupId = groups[index].id;
-                        final members = List<String>.from(group['members'] ?? []);
-                        final memberNames = List<String>.from(group['memberNames'] ?? []);
+                        final members =
+                            List<String>.from(group['members'] ?? []);
+                        final memberNames =
+                            List<String>.from(group['memberNames'] ?? []);
 
                         return Card(
                           color: Colors.grey[800],
@@ -118,11 +123,14 @@ class _GroupsTabState extends State<GroupsTab> {
                           child: ListTile(
                             leading: CircleAvatar(
                               backgroundColor: Colors.green.withOpacity(0.2),
-                              child: const Icon(Icons.group, color: Colors.green),
+                              child:
+                                  const Icon(Icons.group, color: Colors.green),
                             ),
                             title: Text(
                               group['name'] ?? 'No Name',
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
                             ),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +142,8 @@ class _GroupsTabState extends State<GroupsTab> {
                                 if (memberNames.isNotEmpty)
                                   Text(
                                     'Members: ${memberNames.take(3).join(', ')}${memberNames.length > 3 ? '...' : ''}',
-                                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                                    style: const TextStyle(
+                                        color: Colors.grey, fontSize: 12),
                                   ),
                               ],
                             ),
@@ -142,14 +151,18 @@ class _GroupsTabState extends State<GroupsTab> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
-                                  icon: const Icon(Icons.chat, color: Colors.green),
-                                  onPressed: () => _navigateToGroupChat(groupId, group['name']),
+                                  icon: const Icon(Icons.chat,
+                                      color: Colors.green),
+                                  onPressed: () => _navigateToGroupChat(
+                                      groupId, group['name']),
                                 ),
                                 PopupMenuButton<String>(
-                                  icon: const Icon(Icons.more_vert, color: Colors.grey),
+                                  icon: const Icon(Icons.more_vert,
+                                      color: Colors.grey),
                                   onSelected: (value) {
                                     if (value == 'edit') {
-                                      _showEditGroupDialog(groupId, group, members);
+                                      _showEditGroupDialog(
+                                          groupId, group, members);
                                     } else if (value == 'delete') {
                                       _deleteGroup(groupId);
                                     }
@@ -179,43 +192,6 @@ class _GroupsTabState extends State<GroupsTab> {
                                 ),
                               ],
                             ),
-
-                            // trailing: PopupMenuButton<String>(
-                            //
-                            //   icon: const Icon(Icons.more_vert, color: Colors.grey),
-                            //   onSelected: (value) {
-                            //     if (value == 'edit') {
-                            //       _showEditGroupDialog(groupId, group, members);
-                            //     } else if (value == 'delete') {
-                            //       _deleteGroup(groupId);
-                            //     }
-                            //   },
-                            //   itemBuilder: (context) => [
-                            //     const PopupMenuItem(
-                            //       value: 'edit',
-                            //       child: Row(
-                            //         children: [
-                            //           Icon(Icons.edit, color: Colors.blue),
-                            //           SizedBox(width: 8),
-                            //           Text('Edit Group'),
-                            //         ],
-                            //       ),
-                            //     ),
-                            //     const PopupMenuItem(
-                            //       value: 'delete',
-                            //       child: Row(
-                            //         children: [
-                            //           Icon(Icons.delete, color: Colors.red),
-                            //           SizedBox(width: 8),
-                            //           Text('Delete Group'),
-                            //         ],
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
-                            //
-
-
                           ),
                         );
                       },
@@ -229,6 +205,7 @@ class _GroupsTabState extends State<GroupsTab> {
       ),
     );
   }
+
   void _navigateToGroupChat(String groupId, String groupName) {
     Navigator.push(
       context,
@@ -241,95 +218,6 @@ class _GroupsTabState extends State<GroupsTab> {
     );
   }
 
-  // void _showCreateGroupDialog() {
-  //   _selectedMembers.clear();
-  //   _groupNameController.clear();
-  //
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => StatefulBuilder(
-  //       builder: (context, setDialogState) {
-  //         return AlertDialog(
-  //           backgroundColor: Colors.grey[900],
-  //           title: const Text(
-  //             'Create New Group',
-  //             style: TextStyle(color: Colors.green),
-  //           ),
-  //           content: SingleChildScrollView(
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 TextField(
-  //                   controller: _groupNameController,
-  //                   decoration: const InputDecoration(
-  //                     labelText: 'Group Name',
-  //                     labelStyle: TextStyle(color: Colors.grey),
-  //                     border: OutlineInputBorder(),
-  //                     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.green)),
-  //                   ),
-  //                   style: const TextStyle(color: Colors.white),
-  //                 ),
-  //                 const SizedBox(height: 16),
-  //                 const Text(
-  //                   'Select Members:',
-  //                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-  //                 ),
-  //                 const SizedBox(height: 8),
-  //                 Flexible(
-  //                   child: Container(
-  //                     constraints: const BoxConstraints(maxHeight: 200),
-  //                     child: ListView.builder(
-  //                       shrinkWrap: true,
-  //                       itemCount: _members.length,
-  //                       itemBuilder: (context, index) {
-  //                         final member = _members[index];
-  //                         final isSelected = _selectedMembers.contains(member['uid']);
-  //
-  //                         return CheckboxListTile(
-  //                           value: isSelected,
-  //                           onChanged: (value) {
-  //                             setDialogState(() {
-  //                               if (value == true) {
-  //                                 _selectedMembers.add(member['uid']);
-  //                               } else {
-  //                                 _selectedMembers.remove(member['uid']);
-  //                               }
-  //                             });
-  //                           },
-  //                           title: Text(
-  //                             member['name'],
-  //                             style: const TextStyle(color: Colors.white),
-  //                           ),
-  //                           subtitle: Text(
-  //                             member['email'],
-  //                             style: const TextStyle(color: Colors.grey),
-  //                           ),
-  //                           checkColor: Colors.white,
-  //                           activeColor: Colors.green,
-  //                         );
-  //                       },
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () => Navigator.pop(context),
-  //               child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
-  //             ),
-  //             ElevatedButton(
-  //               onPressed: _selectedMembers.isEmpty ? null : _createGroup,
-  //               style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-  //               child: const Text('Create Group'),
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
   void _showCreateGroupDialog() {
     _selectedMembers.clear();
     _groupNameController.clear();
@@ -338,179 +226,98 @@ class _GroupsTabState extends State<GroupsTab> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) {
-          return AlertDialog(
-            backgroundColor: Colors.grey[900],
-            title: const Text(
-              'Create New Group',
-              style: TextStyle(color: Colors.green),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Group Name Input
-                TextField(
-                  controller: _groupNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Group Name',
-                    labelStyle: TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.green)),
+          return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: AlertDialog(
+              backgroundColor: Colors.grey[900],
+              title: const Text(
+                'Create New Group',
+                style: TextStyle(color: Colors.green),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Group Name Input
+                  TextField(
+                    controller: _groupNameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Group Name',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green)),
+                    ),
+                    style: const TextStyle(color: Colors.white),
                   ),
-                  style: const TextStyle(color: Colors.white),
+                  const SizedBox(height: 16),
+
+                  // Members Selection Label
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Select Members:',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Members List
+                  SizedBox(
+                    height: 300, // Fixed height to prevent freeze on desktop
+                    width: double.maxFinite,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _members.length,
+                      itemBuilder: (context, index) {
+                        final member = _members[index];
+                        final isSelected =
+                            _selectedMembers.contains(member['uid']);
+
+                        return CheckboxListTile(
+                          value: isSelected,
+                          onChanged: (value) {
+                            setDialogState(() {
+                              if (value == true) {
+                                _selectedMembers.add(member['uid']);
+                              } else {
+                                _selectedMembers.remove(member['uid']);
+                              }
+                            });
+                          },
+                          title: Text(member['name'],
+                              style: const TextStyle(color: Colors.white)),
+                          subtitle: Text(member['email'],
+                              style: const TextStyle(color: Colors.grey)),
+                          checkColor: Colors.white,
+                          activeColor: Colors.green,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child:
+                      const Text('Cancel', style: TextStyle(color: Colors.grey)),
                 ),
-                const SizedBox(height: 16),
-
-                // Members Selection Label
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Select Members:',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(height: 8),
-
-                // Members List
-                SizedBox(
-                  height: 300, // Fixed height to prevent freeze on desktop
-                  width: double.maxFinite,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _members.length,
-                    itemBuilder: (context, index) {
-                      final member = _members[index];
-                      final isSelected = _selectedMembers.contains(member['uid']);
-
-                      return CheckboxListTile(
-                        value: isSelected,
-                        onChanged: (value) {
-                          setDialogState(() {
-                            if (value == true) {
-                              _selectedMembers.add(member['uid']);
-                            } else {
-                              _selectedMembers.remove(member['uid']);
-                            }
-                          });
-                        },
-                        title: Text(member['name'],
-                            style: const TextStyle(color: Colors.white)),
-                        subtitle: Text(member['email'],
-                            style: const TextStyle(color: Colors.grey)),
-                        checkColor: Colors.white,
-                        activeColor: Colors.green,
-                      );
-                    },
-                  ),
+                ElevatedButton(
+                  onPressed: _selectedMembers.isEmpty ? null : _createGroup,
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  child: const Text('Create Group',style: TextStyle(color: Colors.white),),
                 ),
               ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
-              ),
-              ElevatedButton(
-                onPressed: _selectedMembers.isEmpty ? null : _createGroup,
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                child: const Text('Create Group'),
-              ),
-            ],
           );
         },
       ),
     );
   }
 
-  // void _showEditGroupDialog(String groupId, Map<String, dynamic> group, List<String> currentMembers) {
-  //   _selectedMembers = List.from(currentMembers);
-  //   _groupNameController.text = group['name'] ?? '';
-  //
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => StatefulBuilder(
-  //       builder: (context, setDialogState) {
-  //         return AlertDialog(
-  //           backgroundColor: Colors.grey[900],
-  //           title: const Text(
-  //             'Edit Group',
-  //             style: TextStyle(color: Colors.green),
-  //           ),
-  //           content: SingleChildScrollView(
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 TextField(
-  //                   controller: _groupNameController,
-  //                   decoration: const InputDecoration(
-  //                     labelText: 'Group Name',
-  //                     labelStyle: TextStyle(color: Colors.grey),
-  //                     border: OutlineInputBorder(),
-  //                     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.green)),
-  //                   ),
-  //                   style: const TextStyle(color: Colors.white),
-  //                 ),
-  //                 const SizedBox(height: 16),
-  //                 const Text(
-  //                   'Select Members:',
-  //                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-  //                 ),
-  //                 const SizedBox(height: 8),
-  //                 Container(
-  //                   constraints: const BoxConstraints(maxHeight: 200),
-  //                   child: ListView.builder(
-  //                     shrinkWrap: true,
-  //                     itemCount: _members.length,
-  //                     itemBuilder: (context, index) {
-  //                       final member = _members[index];
-  //                       final isSelected = _selectedMembers.contains(member['uid']);
-  //
-  //                       return CheckboxListTile(
-  //                         value: isSelected,
-  //                         onChanged: (value) {
-  //                           setDialogState(() {
-  //                             if (value == true) {
-  //                               _selectedMembers.add(member['uid']);
-  //                             } else {
-  //                               _selectedMembers.remove(member['uid']);
-  //                             }
-  //                           });
-  //                         },
-  //                         title: Text(
-  //                           member['name'],
-  //                           style: const TextStyle(color: Colors.white),
-  //                         ),
-  //                         subtitle: Text(
-  //                           member['email'],
-  //                           style: const TextStyle(color: Colors.grey),
-  //                         ),
-  //                         checkColor: Colors.white,
-  //                         activeColor: Colors.green,
-  //                       );
-  //                     },
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () => Navigator.pop(context),
-  //               child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
-  //             ),
-  //             ElevatedButton(
-  //               onPressed: _selectedMembers.isEmpty ? null : () => _updateGroup(groupId),
-  //               style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-  //               child: const Text('Update Group'),
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
-  void _showEditGroupDialog(String groupId, Map<String, dynamic> group, List<String> currentMembers) {
+  void _showEditGroupDialog(
+      String groupId, Map<String, dynamic> group, List<String> currentMembers) {
     _selectedMembers = List.from(currentMembers);
     _groupNameController.text = group['name'] ?? '';
 
@@ -554,14 +361,16 @@ class _GroupsTabState extends State<GroupsTab> {
 
                 // Members List
                 SizedBox(
-                  height: 300, // Fixed height for desktop & mobile safe scrolling
+                  height:
+                      300, // Fixed height for desktop & mobile safe scrolling
                   width: double.maxFinite,
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: _members.length,
                     itemBuilder: (context, index) {
                       final member = _members[index];
-                      final isSelected = _selectedMembers.contains(member['uid']);
+                      final isSelected =
+                          _selectedMembers.contains(member['uid']);
 
                       return CheckboxListTile(
                         value: isSelected,
@@ -589,10 +398,13 @@ class _GroupsTabState extends State<GroupsTab> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+                child:
+                    const Text('Cancel', style: TextStyle(color: Colors.grey)),
               ),
               ElevatedButton(
-                onPressed: _selectedMembers.isEmpty ? null : () => _updateGroup(groupId),
+                onPressed: _selectedMembers.isEmpty
+                    ? null
+                    : () => _updateGroup(groupId),
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                 child: const Text('Update Group'),
               ),
@@ -689,8 +501,10 @@ class _GroupsTabState extends State<GroupsTab> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.grey[900],
-        title: const Text('Delete Group', style: TextStyle(color: Colors.white)),
-        content: const Text('Are you sure you want to delete this group?', style: TextStyle(color: Colors.grey)),
+        title:
+            const Text('Delete Group', style: TextStyle(color: Colors.white)),
+        content: const Text('Are you sure you want to delete this group?',
+            style: TextStyle(color: Colors.grey)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
